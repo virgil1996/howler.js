@@ -486,6 +486,10 @@
           return;
         }
 
+        if (self.ctx.state === "suspended") {
+          return;
+        }
+
         self._suspendTimer = null;
         self.state = 'suspending';
 
@@ -521,7 +525,7 @@
       if (self.state === 'running' && self.ctx.state !== 'interrupted' && self._suspendTimer) {
         clearTimeout(self._suspendTimer);
         self._suspendTimer = null;
-      } else if (self.state === 'suspended' || self.state === 'running' && self.ctx.state === 'interrupted') {
+      } else if (self.state === 'suspended' || self.state === 'running' &&  (self.ctx.state === 'interrupted' || self.ctx.state === 'suspended')) {
         self.ctx.resume().then(function() {
           self.state = 'running';
 
